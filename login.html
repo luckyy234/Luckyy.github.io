@@ -1,53 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login - RentEasy Kenya</title>
+  <title>RentEasy Kenya</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 
 <body style="font-family: Arial; text-align:center; padding:20px;">
 
-  <h2>Login / Sign Up</h2>
+  <h1>🏠 RentEasy Kenya</h1>
+  <p>Login to continue</p>
 
-  <input type="email" id="email" placeholder="Enter email"><br><br>
-  <input type="password" id="password" placeholder="Enter password"><br><br>
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
 
-  <button onclick="signUp()">Sign Up</button>
   <button onclick="login()">Login</button>
+  <button onclick="signup()">Sign Up</button>
 
   <p id="message"></p>
 
   <script>
-    const supabaseUrl = "sb_publishable_3PbuC2qrGFLhykHnxJ8GfQ_J7rwARww";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ud2dmY3pxanVpYXN1cW5vcGVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2NzEwMjMsImV4cCI6MjA5NzI0NzAyM30.BOXhpNtkruM-bBIaJYDbmwDEL5KqoFn-7c6MxXkDvtA";
+    // 🔴 REPLACE WITH YOUR REAL DETAILS
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY";
 
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function signUp() {
+    async function signup() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password
+      });
 
-      document.getElementById("message").innerText =
-        error ? error.message : "Signup successful! Check your email.";
+      if (error) {
+        document.getElementById("message").innerText = error.message;
+      } else {
+        document.getElementById("message").innerText = "Signup successful! Check your email.";
+      }
     }
 
     async function login() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
 
       if (error) {
         document.getElementById("message").innerText = error.message;
       } else {
-        window.location.href = "post-room.html";
+        document.getElementById("message").innerText = "Login successful!";
+        
+        // Redirect after login
+        window.location.href = "postroom.html";
       }
     }
   </script>
 
 </body>
-  </html>
+    </html>
