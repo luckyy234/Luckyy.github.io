@@ -3,28 +3,66 @@
 <head>
   <title>RentEasy Kenya</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 
 <body style="font-family: Arial; text-align:center; padding:20px;">
 
   <h1>🏠 RentEasy Kenya</h1>
-  <p>Find and post rental rooms easily</p>
+  <p>Login to continue</p>
 
-  <hr>
+  <input type="email" id="email" placeholder="Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
 
-  <h2>Get Started</h2>
+  <button onclick="login()">Login</button>
+  <button onclick="signup()">Sign Up</button>
 
-  <a href="login.html">
-    <button style="padding:10px; margin:10px;">Login</button>
-  </a>
+  <p id="message"></p>
 
-  <a href="post-room.html">
-    <button style="padding:10px; margin:10px;">Post a Room</button>
-  </a>
+  <script>
+    // 🔴 REPLACE WITH YOUR REAL DETAILS
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_KEY = "YOUR_PUBLIC_ANON_KEY";
 
-  <a href="chat.html">
-    <button style="padding:10px; margin:10px;">Chat</button>
-  </a>
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function signup() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        document.getElementById("message").innerText = error.message;
+      } else {
+        document.getElementById("message").innerText = "Signup successful! Check your email.";
+      }
+    }
+
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) {
+        document.getElementById("message").innerText = error.message;
+      } else {
+        document.getElementById("message").innerText = "Login successful!";
+        
+        // Redirect after login
+        window.location.href = "postroom.html";
+      }
+    }
+  </script>
 
 </body>
-</html>
+  </html>
